@@ -14,11 +14,27 @@ namespace TpMongoDB.Models
         public Equipe EquipeChapeau3 { get; set; }
         public Equipe EquipeChapeau4 { get; set; }
 
-        // Positions spécifiques pour les chapeaux B à F
-        public string PositionB { get; set; }
-        public string PositionC { get; set; }
-        public string PositionD { get; set; }
-        public string PositionE { get; set; }
-        public string PositionF { get; set; }
+
+        // Méthode pour mélanger l'ordre des équipes dans le groupe
+        public void MelangerEquipes(Random random)
+        {
+            var proprieteEquipes = GetType().GetProperties().Where(p => p.Name.StartsWith("EquipeChapeau")).ToList();
+            var equipes = proprieteEquipes.Select(p => p.GetValue(this) as Equipe).ToList();
+
+            // Mélanger l'ordre des équipes dans le groupe
+            for (int i = equipes.Count - 1; i > 0; i--)
+            {
+                int j = random.Next(0, i + 1);
+                var temp = equipes[i];
+                equipes[i] = equipes[j];
+                equipes[j] = temp;
+            }
+
+            // Réaffecter les équipes mises à jour au groupe
+            for (int i = 0; i < proprieteEquipes.Count; i++)
+            {
+                proprieteEquipes[i].SetValue(this, equipes[i]);
+            }
+        }
     }
 }
