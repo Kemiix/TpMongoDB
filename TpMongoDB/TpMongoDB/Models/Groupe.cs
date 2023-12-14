@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,8 +8,11 @@ using System.Threading.Tasks;
 
 namespace TpMongoDB.Models
 {
-    internal class Groupe
+    public class Groupe
     {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public ObjectId Id { get; set; }
         public string Nom { get; set; }
         public Equipe EquipePosition1 { get; set; }
         public Equipe EquipePosition2 { get; set; }

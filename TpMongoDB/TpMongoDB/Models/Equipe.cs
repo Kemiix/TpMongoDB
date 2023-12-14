@@ -18,7 +18,7 @@ namespace TpMongoDB.Models
         public string Code { get; set; }
 
         public int Hat { get; set; }
-        // string qui n'est pas toujours utilisé
+        // il n'est pas toujours utilisé
         public string? Playoff { get; set; }
     }
 }

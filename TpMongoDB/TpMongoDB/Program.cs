@@ -13,11 +13,13 @@ class Program
         var database = client.GetDatabase("euro");
 
         // Configuration des services
-            var serviceProvider = new ServiceCollection()
-         .AddSingleton<IMongoDatabase>(_ => database)
-         .AddTransient<IEquipeRepository, EquipeRepository>()
-         .AddTransient<TirageAuSortPouleService>()
-         .BuildServiceProvider();
+        var serviceProvider = new ServiceCollection()
+            .AddSingleton<IMongoDatabase>(_ => database)
+            .AddTransient<IEquipeRepository, EquipeRepository>()
+            .AddTransient<IGroupeRepository, GroupeRepository>()
+            .AddTransient<TirageAuSortPouleService>()
+            .AddTransient<SimuilerCalendrierService>()
+            .BuildServiceProvider();
 
         // Utilisation d'un scope pour accéder aux services configurés
         using (var scope = serviceProvider.CreateScope())
@@ -30,10 +32,18 @@ class Program
 
                 // Appelle la méthode d'effectuer le tirage au sort
                 tirageAuSortService.EffectuerTirageAuSort();
+                Console.WriteLine("Le tirage au sort a été effectué avec succès.");
+
+                // Récupère le service de calendrier
+                var tsimulationCalendrier = services.GetRequiredService<SimuilerCalendrierService>();
+
+                // Appelle la méthode d'effectuer le calendrier des matchs
+                tsimulationCalendrier.GenererCalendrierMatches();
+                Console.WriteLine("La génération de calendrier a été effectuée avec succès.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Une erreur s'est produite lors du tirage au sort : " + ex.Message);
+                Console.WriteLine("Une erreur s'est produite : " + ex.Message);
             }
         }
     }

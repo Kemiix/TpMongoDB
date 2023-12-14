@@ -12,6 +12,12 @@ namespace TpMongoDB.Services
     {
         private readonly IEquipeRepository _equipeRepository;
         private readonly IMongoCollection<Groupe> _groupesCollection;
+        // Constructeur pour initialiser _groupesCollection
+        public TirageAuSortPouleService(IEquipeRepository equipeRepository,IMongoDatabase database)
+        {
+            _equipeRepository = equipeRepository;
+            _groupesCollection = database.GetCollection<Groupe>("groupes");
+        }
         // Méthode principale pour effectuer le tirage au sort
         public void EffectuerTirageAuSort()
         {
@@ -133,7 +139,7 @@ namespace TpMongoDB.Services
                     groupe.EquipePosition4 = equipe;
                     break;
                 case 'E':
-                    groupe.EquipePosition4 = equipe; 
+                    groupe.EquipePosition4 = equipe;
                     break;
                 case 'F':
                     groupe.EquipePosition4 = equipe;
