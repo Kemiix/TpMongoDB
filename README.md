@@ -1,6 +1,6 @@
 # TpMongoDB
 Master CESI - Découverte du NOSQL avec MongoDB   
-Création du tirage au sort de l'euro 2024 
+Création du tirage au sort de l'euro 2024 + Calendrier des matchs
 
 Init projet :
 
