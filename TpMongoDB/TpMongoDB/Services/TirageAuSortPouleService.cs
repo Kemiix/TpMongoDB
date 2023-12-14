@@ -1,20 +1,18 @@
 ﻿using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using TpMongoDB.Interfaces;
 using TpMongoDB.Models;
 using TpMongoDB.Repositories;
 
 namespace TpMongoDB.Services
 {
-    internal class TirageAuSortPouleService
+    public class TirageAuSortPouleService
     {
-        private readonly EquipeRepository _equipeRepository;
+        private readonly IEquipeRepository _equipeRepository;
         private readonly IMongoCollection<Groupe> _groupesCollection;
 
-        public TirageAuSortPouleService(EquipeRepository equipeRepository, IMongoDatabase database)
+        public TirageAuSortPouleService(IEquipeRepository equipeRepository, IMongoDatabase database)
         {
             _equipeRepository = equipeRepository;
             _groupesCollection = database.GetCollection<Groupe>("groupes");

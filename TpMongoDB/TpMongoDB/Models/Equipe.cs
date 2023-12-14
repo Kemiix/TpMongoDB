@@ -1,22 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Xamarin.Forms;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace TpMongoDB.Models
 {
-    public class Equipe : ContentView
+    public class Equipe
     {
-        public Equipe()
-        {
-            Content = new StackLayout
-            {
-                Children = {
-                    new Label { Text = "Welcome to Xamarin.Forms!" }
-                }
-            };
-        }
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
+
+        [BsonElement("Country name")]
+        public string CountryName { get; set; }
+
+        [BsonElement("FIFA ranking")]
+        public int FifaRanking { get; set; }
+
+        public string Code { get; set; }
+
+        public int Hat { get; set; }
+        public string? Playoff { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
+using TpMongoDB.Interfaces;
 using TpMongoDB.Repositories;
 using TpMongoDB.Services;
 
@@ -12,11 +13,11 @@ class Program
         var database = client.GetDatabase("euro");
 
         // Configuration des services
-        var serviceProvider = new ServiceCollection()
-            .AddSingleton<IMongoDatabase>(_ => database)
-            .AddTransient<IEquipeRepository, EquipeRepository>()
-            .AddTransient<TirageAuSortPouleService>()
-            .BuildServiceProvider();
+            var serviceProvider = new ServiceCollection()
+         .AddSingleton<IMongoDatabase>(_ => database)
+         .AddTransient<IEquipeRepository, EquipeRepository>()
+         .AddTransient<TirageAuSortPouleService>()
+         .BuildServiceProvider();
 
         // Utilisation d'un scope pour accéder aux services configurés
         using (var scope = serviceProvider.CreateScope())
