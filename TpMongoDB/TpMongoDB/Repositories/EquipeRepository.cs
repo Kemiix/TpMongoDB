@@ -18,7 +18,7 @@ namespace TpMongoDB.Repositories
         {
             _collection = database.GetCollection<Equipe>("equipes");
         }
-
+        //Récupère les équipes pour les ajouter à la liste d'équipe
         public List<Equipe> GetAllEquipes()
         {
             return _collection.Find(Builders<Equipe>.Filter.Empty).ToList();

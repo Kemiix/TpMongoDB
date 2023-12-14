@@ -12,17 +12,12 @@ namespace TpMongoDB.Services
     {
         private readonly IEquipeRepository _equipeRepository;
         private readonly IMongoCollection<Groupe> _groupesCollection;
-
-        public TirageAuSortPouleService(IEquipeRepository equipeRepository, IMongoDatabase database)
-        {
-            _equipeRepository = equipeRepository;
-            _groupesCollection = database.GetCollection<Groupe>("groupes");
-        }
-
+        // Méthode principale pour effectuer le tirage au sort
         public void EffectuerTirageAuSort()
         {
             _groupesCollection.DeleteMany(Builders<Groupe>.Filter.Empty);
 
+            // Récupération de la liste de toutes les équipes
             var equipes = _equipeRepository.GetAllEquipes();
 
             var chapeaux = equipes.GroupBy(e => e.Hat).ToDictionary(g => g.Key, g => g.ToList());
@@ -42,37 +37,34 @@ namespace TpMongoDB.Services
             {
                 var groupe = new Groupe { Nom = groupeLettre.ToString() };
 
-                // Vérifier si le groupe est 'A'
+                // Vérifier si le groupe est 'A' car pour Allemagne placer en A1
                 if (groupeLettre == 'A')
                 {
                     // Vérifier si l'Allemagne est dans le chapeau 1
                     if (chapeaux.ContainsKey(1) && chapeaux[1].Any(e => e.CountryName == "Germany"))
                     {
                         var equipeAllemagneChapeau1 = chapeaux[1].First(e => e.CountryName == "Germany");
-                        groupe.EquipeChapeau1 = equipeAllemagneChapeau1;
+                        groupe.EquipePosition1 = equipeAllemagneChapeau1;
                         chapeaux[1].Remove(equipeAllemagneChapeau1);
 
-                        // Ajouter trois équipes supplémentaires si le chapeau a suffisamment d'équipes
-                        for (int i = 0; i < 3 && chapeaux.Count > 1; i++)
+                        // Ajouter une équipe de chaque chapeau restant
+                        for (int chapeauIndex = 2; chapeauIndex <= 4; chapeauIndex++)
                         {
-                            var chapeauIndex = random.Next(2, 5); // Choix aléatoire parmi les chapeaux 2, 3 et 4
-
-                            // Vérifier si le chapeau de l'indice sélectionné contient des équipes
                             if (chapeaux.ContainsKey(chapeauIndex) && chapeaux[chapeauIndex].Any())
                             {
                                 var equipeIndex = random.Next(chapeaux[chapeauIndex].Count);
                                 var equipe = chapeaux[chapeauIndex][equipeIndex];
 
-                                switch (i)
+                                switch (chapeauIndex)
                                 {
-                                    case 0:
-                                        groupe.EquipeChapeau2 = equipe;
-                                        break;
-                                    case 1:
-                                        groupe.EquipeChapeau3 = equipe;
-                                        break;
                                     case 2:
-                                        groupe.EquipeChapeau4 = equipe;
+                                        groupe.EquipePosition2 = equipe;
+                                        break;
+                                    case 3:
+                                        groupe.EquipePosition3 = equipe;
+                                        break;
+                                    case 4:
+                                        groupe.EquipePosition4 = equipe;
                                         break;
                                 }
 
@@ -92,16 +84,16 @@ namespace TpMongoDB.Services
                         switch (chapeauKey)
                         {
                             case 1:
-                                groupe.EquipeChapeau1 = equipe;
+                                groupe.EquipePosition1 = equipe;
                                 break;
                             case 2:
-                                groupe.EquipeChapeau2 = equipe;
+                                groupe.EquipePosition2 = equipe;
                                 break;
                             case 3:
-                                groupe.EquipeChapeau3 = equipe;
+                                groupe.EquipePosition3 = equipe;
                                 break;
                             case 4:
-                                groupe.EquipeChapeau4 = equipe;
+                                groupe.EquipePosition4 = equipe;
                                 break;
                         }
 
@@ -114,7 +106,7 @@ namespace TpMongoDB.Services
                         chapeaux[chapeauKey].RemoveAt(equipeIndex);
                     }
 
-                    // Mélanger l'ordre des équipes dans le groupe
+                    // Ordre des équipes dans le groupe
                     groupe.MelangerEquipes(random);
                 }
 
@@ -128,23 +120,23 @@ namespace TpMongoDB.Services
         {
             var position = equipe.Playoff;
 
-            // Assigner la position spécifique pour les équipes issues des barrages
+            // Position spécifique pour les équipes issues des barrages 
             switch (groupeLettre)
             {
                 case 'B':
-                    groupe.EquipeChapeau2 = equipe;
+                    groupe.EquipePosition2 = equipe;
                     break;
                 case 'C':
-                    groupe.EquipeChapeau3 = equipe;
+                    groupe.EquipePosition3 = equipe;
                     break;
                 case 'D':
-                    groupe.EquipeChapeau4 = equipe;
+                    groupe.EquipePosition4 = equipe;
                     break;
                 case 'E':
-                    groupe.EquipeChapeau4 = equipe; // Vous pouvez ajuster ici pour les groupes E et F
+                    groupe.EquipePosition4 = equipe; 
                     break;
                 case 'F':
-                    groupe.EquipeChapeau4 = equipe; // Vous pouvez ajuster ici pour le groupe F
+                    groupe.EquipePosition4 = equipe;
                     break;
             }
         }

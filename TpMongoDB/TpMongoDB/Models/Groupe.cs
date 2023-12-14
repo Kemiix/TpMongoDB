@@ -9,16 +9,15 @@ namespace TpMongoDB.Models
     internal class Groupe
     {
         public string Nom { get; set; }
-        public Equipe EquipeChapeau1 { get; set; }
-        public Equipe EquipeChapeau2 { get; set; }
-        public Equipe EquipeChapeau3 { get; set; }
-        public Equipe EquipeChapeau4 { get; set; }
-
+        public Equipe EquipePosition1 { get; set; }
+        public Equipe EquipePosition2 { get; set; }
+        public Equipe EquipePosition3 { get; set; }
+        public Equipe EquipePosition4 { get; set; }
 
         // Méthode pour mélanger l'ordre des équipes dans le groupe
         public void MelangerEquipes(Random random)
         {
-            var proprieteEquipes = GetType().GetProperties().Where(p => p.Name.StartsWith("EquipeChapeau")).ToList();
+            var proprieteEquipes = GetType().GetProperties().Where(p => p.Name.StartsWith("EquipePosition")).ToList();
             var equipes = proprieteEquipes.Select(p => p.GetValue(this) as Equipe).ToList();
 
             // Mélanger l'ordre des équipes dans le groupe
